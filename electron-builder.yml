@@ -1,0 +1,26 @@
+appId: com.quiz.store-name-quiz
+productName: 상호명 초성 퀴즈
+directories:
+  output: release
+files:
+  - dist/**/*
+  - electron/**/*
+  - package.json
+  - '!**/*.{md,ts,map}'
+asar: true
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: build/icon.ico
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 상호명 초성 퀴즈
+mac:
+  target: dmg
+  icon: build/icon.png
+publish: null

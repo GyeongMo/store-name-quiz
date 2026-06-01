@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "categories": [
+    {
+      "id": "popular-stores",
+      "name": "인기 브랜드·가게",
+      "icon": "🏪",
+      "description": "주변에서 흔히 보는 인기 가게·브랜드 모음! (예시 데이터 — 편집기에서 자유롭게 추가·수정하세요)",
+      "quizzes": [
+        {
+          "id": "starbucks",
+          "answer": "스타벅스",
+          "initials": "ㅅㅌㅂㅅ",
+          "aliases": ["스벅"],
+          "pictogram": "☕🟢🧜",
+          "catchphrase": "사이렌 오더로 주문하세요!"
+        },
+        {
+          "id": "mcdonalds",
+          "answer": "맥도날드",
+          "initials": "ㅁㄷㄴㄷ",
+          "aliases": ["맥날"],
+          "pictogram": "🍔🍟🟡",
+          "catchphrase": "해피밀 세트 나왔습니다!"
+        },
+        {
+          "id": "oliveyoung",
+          "answer": "올리브영",
+          "initials": "ㅇㄹㅂㅇ",
+          "aliases": ["올영"],
+          "pictogram": "💄🧴🫒",
+          "catchphrase": "올영 세일 시작!"
+        },
+        {
+          "id": "daiso",
+          "answer": "다이소",
+          "initials": "ㄷㅇㅅ",
+          "aliases": [],
+          "pictogram": "🛒💰🧺",
+          "catchphrase": "이게 다 천원이라고?"
+        },
+        {
+          "id": "baskin-robbins",
+          "answer": "배스킨라빈스",
+          "initials": "ㅂㅅㅋㄹㅂㅅ",
+          "aliases": ["배라"],
+          "pictogram": "🍦🥄🌈",
+          "catchphrase": "골라 먹는 재미가 있어요!"
+        },
+        {
+          "id": "kyochon",
+          "answer": "교촌치킨",
+          "initials": "ㄱㅊㅊㅋ",
+          "aliases": ["교촌"],
+          "pictogram": "🍗🔥🍯",
+          "catchphrase": "허니 콤보 한 마리요!"
+        },
+        {
+          "id": "paris-baguette",
+          "answer": "파리바게뜨",
+          "initials": "ㅍㄹㅂㄱㄸ",
+          "aliases": ["파바"],
+          "pictogram": "🥖🎂🇫🇷",
+          "catchphrase": "갓 구운 빵 나왔어요!"
+        },
+        {
+          "id": "compose-coffee",
+          "answer": "컴포즈커피",
+          "initials": "ㅋㅍㅈㅋㅍ",
+          "aliases": ["컴포즈"],
+          "pictogram": "☕🧊💸",
+          "catchphrase": "가성비 커피 한 잔!"
+        }
+      ]
+    }
+  ]
+}
