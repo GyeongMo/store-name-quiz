@@ -49,7 +49,9 @@ settings ──▶ playing ──▶ awards ──▶ (결승전 시 다시 play
 
 단일 `GameState`를 `useReducer`로 관리. `GameProvider`가 `soundManager.preload()`와 Web Audio autoplay unlock을 담당. Context로 전역 접근.
 
-주요 액션: `UPDATE_SETTINGS` / `START_GAME` / `TICK` / `REVEAL_ANSWER` / `NEXT_QUESTION` / `ADJUST_SCORE` / `UPDATE_TEAM` / `START_TIEBREAKER` / `RESOLVE_TIEBREAKER`.
+주요 액션: `UPDATE_SETTINGS` / `START_GAME` / `TICK` / `SHOW_HINT1` / `SHOW_HINT2` / `REVEAL_ANSWER` / `NEXT_QUESTION` / `ADJUST_SCORE` / `UPDATE_TEAM` / `START_TIEBREAKER` / `RESOLVE_TIEBREAKER` / `GO_AWARDS` / `RESTART` / `OPEN_EDITOR` / `CLOSE_EDITOR`. (`SHOW_HINT1`/`SHOW_HINT2`는 진행자가 타이머와 무관하게 힌트를 수동 노출하는 용도.)
+
+**`timerEnabled: false`**: `START_GAME`/`NEXT_QUESTION`이 곧바로 `phase='revealed'` + hint1/hint2 모두 노출 상태로 시작 (타이머·자동 힌트 없이 진행자가 직접 진행).
 
 상수: `TIEBREAKER_SECONDS = 10`, `TIEBREAKER_WIN_BONUS = 50` (결승전 고정 타이머 10초, 우승 팀 +50점).
 
