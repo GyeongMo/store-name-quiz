@@ -40,6 +40,22 @@ ipcMain.handle('dialog:saveResult', async (_evt, { filename, content, type }) =>
   return { saved: true, filePath };
 });
 
+// 퀴즈 편집 내용을 기본 데이터 파일(src/data/quizzes.json)에 영구 기록.
+// 패키징된 빌드는 asar 내부라 읽기 전용이므로 건너뜀(렌더러가 localStorage 폴백 유지).
+ipcMain.handle('quiz:savePool', async (_evt, json) => {
+  if (app.isPackaged) {
+    return { saved: false, reason: 'packaged-readonly' };
+  }
+  try {
+    JSON.parse(json); // 손상 방지: 유효한 JSON인지 검증 후 기록
+    const target = path.join(__dirname, '..', 'src', 'data', 'quizzes.json');
+    fs.writeFileSync(target, json, 'utf-8');
+    return { saved: true, filePath: target };
+  } catch (e) {
+    return { saved: false, reason: String(e) };
+  }
+});
+
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
   createWindow();

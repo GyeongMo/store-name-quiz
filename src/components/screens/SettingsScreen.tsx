@@ -23,7 +23,7 @@ export function SettingsScreen() {
     .filter((c) => settings.selectedCategoryId === 'all' || c.id === settings.selectedCategoryId)
     .flatMap((c) => c.quizzes.filter((q) => q.isEnabled !== false));
 
-  const maxQuestions = Math.min(30, availableQuizzes.length);
+  const maxQuestions = Math.max(1, availableQuizzes.length);
 
   const handleStart = () => {
     const count = Math.min(settings.questionCount, availableQuizzes.length);
@@ -42,12 +42,9 @@ export function SettingsScreen() {
         animate={{ y: 0, opacity: 1 }}
         className="text-center mb-8"
       >
-        <h1 className="text-3xl sm:text-5xl font-bold text-text-primary mb-3">
-          상호명 초성 퀴즈
+        <h1 className="text-[35px] sm:text-[53px] font-bold text-text-primary mb-3">
+          4학년 7반 생활부 <span className="text-accent">향동동 가게 이름</span> 초성게임
         </h1>
-        <h2 className="text-2xl sm:text-4xl font-bold text-accent mb-2">
-          🏪 가게 이름 맞히기
-        </h2>
         <p className="text-lg text-text-secondary">게임 시작 전에 설정을 맞춰주세요</p>
       </motion.div>
 
@@ -77,7 +74,7 @@ export function SettingsScreen() {
         {settings.timerEnabled && (
           <SettingRow label="타이머 시간">
             <div className="flex gap-2">
-              {[15, 20, 30, 45, 60].map((s) => (
+              {[20, 30, 45, 60].map((s) => (
                 <button
                   key={s}
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', patch: { timerSeconds: s } })}
@@ -94,13 +91,14 @@ export function SettingsScreen() {
           </SettingRow>
         )}
 
-        <SettingRow label={`문제 개수 (최대 ${maxQuestions})`}>
+        <SettingRow label="문제 개수">
           <NumberStepper
             value={Math.min(settings.questionCount, maxQuestions)}
             min={1}
             max={maxQuestions}
             onChange={(v) => dispatch({ type: 'UPDATE_SETTINGS', patch: { questionCount: v } })}
             unit="문제"
+            showMax
           />
         </SettingRow>
 
@@ -179,12 +177,14 @@ function NumberStepper({
   max,
   onChange,
   unit,
+  showMax,
 }: {
   value: number;
   min: number;
   max: number;
   onChange: (v: number) => void;
   unit?: string;
+  showMax?: boolean;
 }) {
   return (
     <div className="flex items-center gap-2">
@@ -208,6 +208,16 @@ function NumberStepper({
       >
         +
       </button>
+      {showMax && (
+        <button
+          onClick={() => onChange(max)}
+          disabled={value >= max}
+          className="px-3 h-10 rounded-full bg-accent text-white font-bold text-sm
+                     disabled:opacity-40 cursor-pointer hover:bg-correct transition-colors"
+        >
+          최대
+        </button>
+      )}
     </div>
   );
 }

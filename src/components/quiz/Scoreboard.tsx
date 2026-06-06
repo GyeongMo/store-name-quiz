@@ -14,26 +14,37 @@ const COLOR_MAP: Record<string, string> = {
 };
 
 const EMOJI_PRESETS = ['🐻', '🦁', '🚀', '🌸', '⚡', '🌈', '🦄', '🐶', '🐱', '🐵', '🐼', '🦊', '🐧', '🌟', '👑', '🤖'];
+// key는 저장 데이터 호환을 위해 유지하고, 라벨만 스카이블루·민트 계열로 표기
 const COLOR_PRESETS: Array<{ key: string; label: string }> = [
-  { key: 'pink', label: '분홍' },
-  { key: 'mint', label: '민트' },
-  { key: 'sky', label: '하늘' },
-  { key: 'lemon', label: '레몬' },
-  { key: 'lavender', label: '라벤더' },
-  { key: 'peach', label: '복숭아' },
+  { key: 'pink', label: '하늘' },
+  { key: 'mint', label: '청록' },
+  { key: 'sky', label: '블루' },
+  { key: 'lemon', label: '연민트' },
+  { key: 'lavender', label: '물빛' },
+  { key: 'peach', label: '민트' },
 ];
 
 export function Scoreboard() {
   const { state, dispatch } = useGame();
 
+  const scores = state.teams.map((t) => t.score);
+  const maxScore = Math.max(1, ...scores);
+  const topScore = Math.max(...scores, 0);
+
   return (
     <div className="bg-white rounded-3xl p-4 shadow-[var(--shadow-card)] h-full">
-      <h2 className="text-xl font-bold text-text-primary mb-3 text-center">
+      <h2 className="text-[2.5rem] font-bold text-text-primary mb-4 text-center leading-tight">
         🏆 점수 현황판
       </h2>
-      <div className="space-y-3">
+      <div className="space-y-8">
         {state.teams.map((team) => (
-          <TeamCard key={team.id} team={team} dispatch={dispatch} />
+          <TeamCard
+            key={team.id}
+            team={team}
+            dispatch={dispatch}
+            maxScore={maxScore}
+            isLeader={team.score === topScore && team.score > 0}
+          />
         ))}
       </div>
     </div>
@@ -43,49 +54,69 @@ export function Scoreboard() {
 function TeamCard({
   team,
   dispatch,
+  maxScore,
+  isLeader,
 }: {
   team: Team;
   dispatch: React.Dispatch<import('../../types/game').GameAction>;
+  maxScore: number;
+  isLeader: boolean;
 }) {
   const [editing, setEditing] = useState(false);
-  const bg = COLOR_MAP[team.colorTheme] ?? 'bg-bubble-1';
+  const fill = COLOR_MAP[team.colorTheme] ?? 'bg-bubble-1';
+  // 점수 비례 막대 길이(%). 양수면 최소 10%는 보이게, 0 이하는 0%.
+  const pct = team.score > 0 ? Math.max(10, (team.score / maxScore) * 100) : 0;
 
   return (
-    <motion.div layout className={`${bg} rounded-2xl p-3 shadow-[var(--shadow-card)] relative`}>
-      <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setEditing((v) => !v)}
-            className="text-2xl cursor-pointer hover:scale-110 transition-transform"
-            title="이모지/색상 변경"
-          >
-            {team.emoji}
-          </button>
-          <input
-            type="text"
-            value={team.name}
-            onChange={(e) =>
-              dispatch({
-                type: 'UPDATE_TEAM',
-                teamId: team.id,
-                patch: { name: e.target.value.slice(0, 10) },
-              })
-            }
-            className="bg-transparent font-bold text-text-primary text-base w-24 outline-none
-                       focus:bg-white/50 rounded px-1"
-          />
+    <div className="relative">
+      {/* 막대그래프 */}
+      <div
+        className={`relative h-14 rounded-2xl bg-gray-100 overflow-hidden ${
+          isLeader ? 'ring-2 ring-accent ring-offset-2' : ''
+        }`}
+      >
+        <div
+          className={`h-full ${fill}`}
+          style={{ width: `${pct}%` }}
+        />
+        <div className="absolute inset-0 flex items-center justify-between px-3 gap-2">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <button
+              onClick={() => setEditing((v) => !v)}
+              className="text-2xl shrink-0 cursor-pointer hover:scale-110 transition-transform drop-shadow"
+              title="이모지/색상 변경"
+            >
+              {team.emoji}
+            </button>
+            <input
+              type="text"
+              value={team.name}
+              onChange={(e) =>
+                dispatch({
+                  type: 'UPDATE_TEAM',
+                  teamId: team.id,
+                  patch: { name: e.target.value.slice(0, 10) },
+                })
+              }
+              className="bg-transparent font-bold text-text-primary text-[2rem] w-32 outline-none
+                         focus:bg-white/60 rounded px-1"
+            />
+          </div>
+          <div className="flex items-center gap-1 shrink-0">
+            {isLeader && <span className="text-lg">👑</span>}
+            <motion.span
+              key={team.score}
+              initial={{ scale: 1.4, color: '#4FBEE2' }}
+              animate={{ scale: 1, color: '#2C5360' }}
+              className="text-[2rem] font-bold tabular-nums drop-shadow-sm"
+            >
+              {team.score}점
+            </motion.span>
+          </div>
         </div>
-        <motion.span
-          key={team.score}
-          initial={{ scale: 1.4, color: '#FF6B9D' }}
-          animate={{ scale: 1, color: '#4A3728' }}
-          className="text-2xl font-bold"
-        >
-          {team.score}점
-        </motion.span>
       </div>
 
-      <div className="flex gap-1.5">
+      <div className="flex gap-1.5 mt-1.5">
         <button
           onClick={() => {
             soundManager.play('score-up');
@@ -111,7 +142,7 @@ function TeamCard({
             soundManager.play('foul');
             dispatch({ type: 'ADJUST_SCORE', teamId: team.id, delta: -2 });
           }}
-          className="flex-1 py-2 rounded-xl bg-gray-600 text-white font-bold text-sm
+          className="flex-1 py-2 rounded-xl bg-slate-400 text-white font-bold text-sm
                      hover:brightness-110 active:scale-95 transition-all cursor-pointer"
           title="반칙 (-2점)"
         >
@@ -168,6 +199,6 @@ function TeamCard({
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }

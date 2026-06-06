@@ -20,13 +20,13 @@ export function createDefaultTeams(count: number): Team[] {
 const initialState: GameState = {
   screen: 'settings',
   settings: {
-    teamCount: 4,
+    teamCount: 6,
     timerSeconds: 30,
     timerEnabled: true,
-    questionCount: 10,
+    questionCount: 25,
     selectedCategoryId: 'all',
   },
-  teams: createDefaultTeams(4),
+  teams: createDefaultTeams(6),
   quizzes: [],
   currentIndex: 0,
   phase: 'idle',
@@ -73,11 +73,16 @@ function reducer(state: GameState, action: GameAction): GameState {
 
       // 결승전에서는 힌트 자동 노출 차단 (초성만으로 승부)
       if (!state.tieBreaker.active) {
-        if (!hint1Shown && next <= Math.floor(total / 2)) {
+        // 전체 시간의 1/3이 지난 시점(= 남은 시간이 2/3 이하)에 픽토그램 노출
+        if (!hint1Shown && next <= Math.floor((total * 2) / 3)) {
           hint1Shown = true;
         }
-        if (!hint2Shown && next <= 5 && next > 0) {
+        // 명대사(TTS) 힌트: 전체 시간의 2/3가 지난 시점(= 남은 시간이 1/3 이하)에 노출
+        if (!hint2Shown && next <= Math.floor(total / 3) && next > 0) {
           hint2Shown = true;
+        }
+        // 마지막 5초에는 카운트다운 phase로 전환
+        if (next <= 5 && next > 0) {
           phase = 'countdown';
         }
       } else {

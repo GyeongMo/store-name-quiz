@@ -13,6 +13,7 @@ import {
   resetToDefault,
   exportPool,
   importPool,
+  imageFileToDataUrl,
 } from '../../utils/quizPool';
 import { speak, cancelSpeak, isTTSAvailable } from '../../utils/tts';
 import { useDialogs } from '../common/DialogProvider';
@@ -318,12 +319,31 @@ function QuizEditorModal({
   const [aliases, setAliases] = useState((quiz?.aliases ?? []).join(', '));
   const [pictogram, setPictogram] = useState(quiz?.pictogram ?? '');
   const [catchphrase, setCatchphrase] = useState(quiz?.catchphrase ?? '');
+  const [photo, setPhoto] = useState(quiz?.photo ?? '');
+  const [photoBusy, setPhotoBusy] = useState(false);
 
   const autoInitials = () => setInitials(extractChosung(answer));
 
   const previewTTS = () => {
     if (!catchphrase.trim()) return;
     speak(catchphrase.trim());
+  };
+
+  const handlePhotoFile = async (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      await dialogs.alert('이미지 파일만 업로드할 수 있습니다.');
+      return;
+    }
+    setPhotoBusy(true);
+    try {
+      const dataUrl = await imageFileToDataUrl(file);
+      setPhoto(dataUrl);
+    } catch (e) {
+      await dialogs.alert('이미지 처리 실패: ' + (e as Error).message);
+    } finally {
+      setPhotoBusy(false);
+    }
   };
 
   const handleSave = async () => {
@@ -357,6 +377,7 @@ function QuizEditorModal({
         .filter(Boolean),
       pictogram: pictogram.trim(),
       catchphrase: catchphrase.trim(),
+      photo: photo.trim() || undefined,
       isCustom: true,
       isEnabled: quiz?.isEnabled ?? true,
       createdAt: quiz?.createdAt ?? now,
@@ -457,6 +478,45 @@ function QuizEditorModal({
                 이 환경에서는 음성 합성(TTS)이 지원되지 않습니다. Electron·Chrome·Edge에서 정상 동작합니다.
               </p>
             )}
+          </Field>
+
+          <Field label="가게 홍보사진 (선택)">
+            <div className="flex items-center gap-2 flex-wrap">
+              <label className="px-3 py-2 rounded-lg bg-bubble-4 text-sm font-bold cursor-pointer hover:brightness-110">
+                {photoBusy ? '처리 중…' : '📁 파일 업로드'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => handlePhotoFile(e.target.files?.[0])}
+                />
+              </label>
+              {photo && (
+                <button
+                  type="button"
+                  onClick={() => setPhoto('')}
+                  className="px-3 py-2 rounded-lg bg-bubble-1 text-sm font-bold cursor-pointer hover:brightness-110"
+                >
+                  🗑 삭제
+                </button>
+              )}
+            </div>
+            <input
+              value={photo.startsWith('data:') ? '' : photo}
+              onChange={(e) => setPhoto(e.target.value)}
+              placeholder="또는 이미지 URL 붙여넣기 (https://...)"
+              className="w-full mt-2 px-3 py-2 rounded-lg bg-bg-primary outline-none text-sm"
+            />
+            {photo && (
+              <img
+                src={photo}
+                alt="홍보사진 미리보기"
+                className="mt-2 max-h-40 rounded-xl border border-gray-200 object-contain"
+              />
+            )}
+            <p className="text-xs text-text-secondary mt-1">
+              업로드한 사진은 앱에 저장됩니다. 저작권에 유의해 직접 촬영했거나 사용 허락된 사진을 권장합니다.
+            </p>
           </Field>
         </div>
 

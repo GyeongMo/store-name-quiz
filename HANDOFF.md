@@ -3,48 +3,80 @@
 > 다음 에이전트(또는 새 세션)가 이어서 작업할 수 있도록 작성한 인수인계 문서. 새 대화에서 이 파일 경로(`C:\development\store-name-quiz\HANDOFF.md`)만 주면 맥락을 복원할 수 있다.
 
 ## Goal
-이번 세션의 목표는 두 가지였다:
-1. `store-name-quiz` 프로젝트의 `CLAUDE.md`를 `/init`으로 점검·개선하고 GitHub에 push.
-2. 사용자가 기대한 `/dx:handoff` 명령(`dx` 플러그인)이 보이지 않는 원인을 찾고 설치.
+이번 세션은 **퀴즈 콘텐츠를 "향동(동)" 동네 가게 이름으로 채우고, 문제/설정 화면 UI·UX를 다듬는** 작업이었다. 사용자가 짧은 한국어 지시를 연속으로 주는 방식으로 진행됐고, 모든 요청을 순차 반영했다.
 
-두 목표 모두 **완료**되었다. 이 문서 자체가 마지막 산출물이다.
+(이전 세션 목표였던 `CLAUDE.md` 점검·push, `dx` 플러그인 설치는 이미 완료됨 — 아래 "이전 세션" 참조.)
 
-## Current Progress (완료된 작업)
-1. **CLAUDE.md 개선** — 기존 문서가 이미 정확하고 충실해서 전면 재작성 대신 2가지 누락만 보강:
-   - reducer 액션 전체 목록 보강 (`SHOW_HINT1`/`SHOW_HINT2`/`GO_AWARDS`/`RESTART`/`OPEN_EDITOR`/`CLOSE_EDITOR` 추가)
-   - `timerEnabled: false` 동작(즉시 `phase='revealed'` + 힌트 전체 노출) 명시
-   - 핵심 주장(storage key `store-name-quiz-v1`, tiebreaker 상수 10s/+50, 중복 디스패치 가드 등)은 코드와 대조해 정확함을 확인.
-2. **GitHub push 완료**:
-   - 변경 커밋 `bca32b6` 생성
-   - remote `origin` = `https://github.com/GyeongMo/store-name-quiz.git` 신규 추가
-   - `main` 브랜치 push + upstream 추적 설정 완료. **현재 working tree 깨끗, 원격과 동기화됨.**
-3. **`dx` 플러그인 설치 완료**:
-   - 마켓플레이스 `ykdojo` (`github: ykdojo/claude-code-tips`) 추가 (user 스코프)
-   - 플러그인 `dx@ykdojo` v0.14.12 설치·enabled
-   - 제공 명령: `/dx:handoff`(이 문서를 생성한 명령), `/dx:clone`, `/dx:half-clone`, `/dx:gha`, `/dx:reddit-fetch`, `/dx:review-claudemd`
+## Current Progress (이번 세션에서 한 작업)
+
+### 1. 문서의 도메인 표현 정리 (애니메이션 → 향동 가게 이름)
+- `CLAUDE.md`, `README.md`에서 **퀴즈 도메인**을 가리키던 "애니메이션" 표현만 "향동 가게 이름"으로 치환.
+- UI/CSS 애니메이션(framer-motion, 키프레임)·원본 프로젝트명(`initialism-quiz`)은 사실 표현이라 **그대로 둠**.
+- `README.md` 데이터 저장 위치 표가 원본(`yeneungbu`/`예능부`) 값으로 stale → 실제 코드값으로 교정 (key `store-name-quiz-v1`, productName `상호명 초성 퀴즈`, `Documents/상호명초성퀴즈/`).
+- `docs/CONTENT_GUIDE.md`(폐기된 v1.2 문서)는 손대지 않음.
+
+### 2. 첫 화면 제목 변경
+- `SettingsScreen.tsx` `<h1>`: "상호명 초성 퀴즈" → **"향동동 가게 이름 초성퀴즈"** (사용자가 "향동동" 두 글자로 확정). 제목 글자 크기 `text-[35px] sm:text-[53px]`.
+- 참고: `index.html`의 `<title>`은 그대로 둠(미요청).
+
+### 3. 퀴즈 데이터 대량 추가 (`src/data/quizzes.json`)
+- 단일 카테고리 `popular-stores`에 항목을 계속 append. **현재 총 57개**.
+- 각 항목 필드: `id`(영문 slug, 중복 금지) / `answer` / `initials`(직접 계산한 초성, 공백은 단어 구분 유지) / `aliases` / `pictogram`(이모지) / `catchphrase`.
+- 중복 브랜드는 스킵함: 다이소·배스킨라빈스(베스킨 라빈스)·파리바게뜨(파리바게트)·노브랜드버거(중복 요청).
+- 업종 보정 받은 항목: 팔각도(닭 숯불구이), 푸른달 열엿새(베이커리), 안드로메다·엔젤헌터스·지구오락실(가챠샵), 가빈(중국집), 나이스가이(남성 헤어컷), 60계(초성 `ㅇㅅㄱ ㅊㅋ` 육십계).
+- **검증 방법**: `node -e "const d=require('.../quizzes.json'); ... 중복 id/answer 체크"` 로 매번 파싱+중복 확인 (마지막 결과: 57개, 중복 없음).
+
+### 4. 문제 화면(`src/components/quiz/QuizBoard.tsx`) UI/UX 개편 — 이번 세션 핵심
+- **라벨 제거**: "초성 힌트", "픽토그램 힌트", "🔊 명대사 힌트", 정답의 "정답"·"다른 이름" 문구 모두 삭제 → 글자/이모지만 노출.
+- **초성·정답 글자**: 글자별 무지개 색 span. 기본 크기를 **반응형 클래스** `text-8xl sm:text-9xl md:text-[180px] xl:text-[260px]` 로. 정답도 초성과 동일 클래스(공개 시 같은 위치에 표시).
+- **`FitText` 컴포넌트(파일 하단 정의)**: 컨테이너 폭 측정 → **넘칠 때만** `transform: scale`로 축소(확대 안 함, scale ≤ 1), 스케일된 높이를 컨테이너 높이로 잡아 아래 요소와 겹침 방지. `ResizeObserver`로 반응형. → 초성/정답에 적용.
+  - (히스토리: "폭 꽉 채움+세로 절반 상한"까지 갔다가, 사용자가 `AskUserQuestion`에서 **"폭 채움 제거, 단계별 크기"** 선택 → 현재의 축소 전용 + 반응형 클래스로 확정.)
+- **정답 공개 동작**: 상단 초성이 사라지고 **그 자리에** 정답이 스케일 애니메이션으로 표시.
+- **픽토그램**: 크기 1.5배(`text-[108px] sm:text-[144px]`).
+- **명대사**:
+  - 진행 중: **아래에서 위로 올라와 가운데 자리에서 멈추는** 슬라이드업(`initial y:140 → y:0`, 0.8s easeOut). (이전엔 우→좌 무한 마퀴였으나 제거함 → `Marquee` 컴포넌트 삭제됨.)
+  - 정답 공개 시: 마퀴/슬라이드 없이 **화면 가운데 고정** 텍스트.
+  - 글자 크기 2배 `text-5xl sm:text-6xl`.
+- **요소 간 간격**: 초성/픽토그램/명대사 사이 `mb`를 원래의 **4배**로 (`mb-24` / `mb-16` / `mb-8`).
+
+### 5. 타이머/힌트 타이밍 (`src/hooks/useGameReducer.ts` TICK)
+- **픽토그램**: 전체 시간의 **1/3 경과** 시 노출 (`next <= floor(total*2/3)`).
+- **명대사(TTS+텍스트)**: 전체 시간의 **2/3 경과** 시 노출 (`next <= floor(total/3)`). 카운트다운 phase와 **분리**(카운트다운은 기존대로 마지막 5초).
+- **카운트다운 중 명대사 음성 차단**: `QuizBoard`의 TTS effect `inHintPhase`에서 `'countdown'` 제외 → countdown 진입 시 `cancelSpeak()`로 중단.
+- ⚠️ `CLAUDE.md`의 타임라인 설명(픽토그램 1/2, 명대사 -5초)은 **이제 코드와 불일치** → 갱신 필요(아래 Next Steps).
+
+### 6. 설정 화면(`src/components/screens/SettingsScreen.tsx`)
+- 문제 개수 스테퍼 옆에 **"최대"(한글) 버튼** 추가 → 누르면 카테고리 전체 활성 퀴즈 수로 즉시 설정. `NumberStepper`에 `showMax` prop 추가, 문제 개수에만 적용.
+- 문제 개수의 **"(최대 N)" 라벨 문구 제거**, 30개 상한 제거(`Math.min(30,…)` → `Math.max(1, availableQuizzes.length)`) → 진짜 전체 개수 선택 가능.
 
 ## What Worked
-- **CLAUDE.md 검증 우선 접근**: 무작정 재작성하지 않고 코드(`useGameReducer.ts`, `storage.ts`)와 대조 → 정확한 문서임을 확인하고 최소 편집만 한 것이 적절했다.
-- **플러그인 설치는 `claude` CLI가 정답**: 인터랙티브 `/plugin` UI 대신 비대화형으로 처리됨:
-  - `claude plugin marketplace add ykdojo/claude-code-tips`
-  - `claude plugin install dx@ykdojo`
-  - `claude plugin list`로 검증
-- **저장소 구조 파악**: `gh api repos/.../contents`로 `.claude-plugin/marketplace.json`·`plugin.json`을 읽어 플러그인 이름이 `dx`임을 확정한 뒤 설치.
+- **편집마다 `npx tsc -b --noEmit`로 타입 검증** → 모든 변경 후 exit 0 확인. (테스트 프레임워크 없음, 타입체크가 1차 안전망.)
+- **JSON 추가 후 `node -e`로 파싱+중복 id/answer 검사** → 데이터 깨짐/중복 방지.
+- **`transform: scale` + 컨테이너 높이 보정** 패턴으로 폰트 자동 맞춤 구현(레이아웃 reflow 문제 회피).
+- 애매한 요구("반응형")는 **`AskUserQuestion`으로 의도 확인 후 구현** → 헛작업 방지.
 
 ## What Didn't Work / 주의점
-- **`/dx:handoff`가 처음엔 "Unknown command"**였던 이유 = `dx` 플러그인 미설치. 공식 마켓플레이스(`claude-plugins-official`)에는 `dx`가 없었고, 별도 서드파티 저장소(`ykdojo/claude-code-tips`)에 있었다.
-- **새 플러그인 명령은 세션 재시작 후 로드**됨. 설치 직후 같은 세션에서는 안 잡힐 수 있다(이번엔 재시작 후 인식되어 이 명령 실행 성공).
-- **환경 주의(CLAUDE.md 기재)**: WSL에서는 Electron 실행 불가(`npm run dev` 웹 모드만). WSL↔Windows 간 `npm install` 혼용 시 네이티브 바이너리 깨짐.
-- `dx` 플러그인 라이선스는 "All Rights Reserved", `reddit-fetch`는 Gemini CLI 의존(단 `handoff`는 추가 의존성 없음).
+- **`Edit` old_string에 nbsp(` `) 포함 줄이 안 잡힘**: 초성/정답 span의 `{ch === ' ' ? '  ' : ch}` 줄. → 그 줄을 피해 앞뒤로 나눠 편집하거나, nbsp 없는 고유 줄을 타깃해야 함.
+- **명대사 마퀴(우→좌 무한 스크롤)는 결국 폐기**됨. 사용자가 "아래→가운데 멈춤"을 원해서 `Marquee` 컴포넌트 자체를 삭제. (다시 필요하면 git 히스토리/이 문서 참고해 재작성.)
+- **`FitText` "폭 꽉 채움+세로 절반 상한" 방향도 폐기**됨. 최종은 "축소 전용 + 반응형 클래스".
+- 사용자 입력에 오타 잦음(예: "나이스카이"=나이스가이, "0.5배로 크게"=1.5배로 해석). 맥락으로 보정하되 결과를 명시할 것.
 
 ## Next Steps
-이번 세션의 명시적 요청은 모두 끝났다. 후속 작업이 있다면 후보:
-- [ ] (선택) `HANDOFF.md`를 `.gitignore`에 넣을지, 커밋할지 사용자에게 확인. 보통 인수인계 문서는 커밋하지 않는 경우가 많다.
-- [ ] (대기 중인 정리 항목, CLAUDE.md에 명시됨) `public/assets/images/animations/*.svg` 24개는 코드에서 참조되지 않는 레거시 잔재 → 정리 가능. `docs/CONTENT_GUIDE.md`도 폐기된 v1.2 이전 문서.
-- [ ] 신규 기능/버그 요청은 아직 없음. 사용자 지시 대기.
+- [ ] **`CLAUDE.md` 타이머 타임라인 설명 갱신** (픽토그램 1/3, 명대사 2/3, 카운트다운 마지막 5초로). 현재 문서가 코드와 불일치.
+- [ ] **변경사항 커밋/푸시 여부 확인**: 현재 working tree에 미커밋 변경 6개 파일(`CLAUDE.md README.md QuizBoard.tsx SettingsScreen.tsx quizzes.json useGameReducer.ts`). 사용자가 push 지시한 적 없음 → 지시 대기.
+- [ ] (선택) 가챠샵·중국집 등 **추정으로 채운 픽토그램/명대사** 실제와 맞는지 사용자 확인.
+- [ ] (대기) `public/assets/images/animations/*.svg` 24개 레거시 잔재, `docs/CONTENT_GUIDE.md` 폐기 문서 정리.
+- [ ] 실제 브라우저(`npm run dev`)에서 초성 자동 축소·명대사 슬라이드업·간격(4배)·"최대" 버튼 등 **육안 확인** (타입체크만 했고 런타임 확인은 안 함).
 
 ## 참고 파일
-- `CLAUDE.md` — 프로젝트 아키텍처 가이드(이번에 보강함), 한국어
-- `src/hooks/useGameReducer.ts` — 게임 상태/액션 핵심
-- `src/utils/storage.ts` — localStorage 영속화 (key: `store-name-quiz-v1`)
+- `src/components/quiz/QuizBoard.tsx` — 문제 화면 전체. 하단에 `FitText`·`QuestionProgress` 로컬 컴포넌트.
+- `src/hooks/useGameReducer.ts` — TICK 힌트 타이밍, 상수(`TIEBREAKER_SECONDS=10`, `+50`).
+- `src/components/screens/SettingsScreen.tsx` — 설정, `NumberStepper`(showMax).
+- `src/data/quizzes.json` — 퀴즈풀(현재 57개, `popular-stores` 단일 카테고리).
+- `CLAUDE.md` — 아키텍처 가이드(타임라인 부분 stale).
 - remote: `https://github.com/GyeongMo/store-name-quiz.git` (branch `main`)
+
+## 이전 세션 (완료, 참고용)
+1. **CLAUDE.md 보강** (reducer 액션 목록, `timerEnabled:false` 동작) → 커밋 `bca32b6`, `main` push 완료.
+2. **`dx` 플러그인 설치**: 마켓플레이스 `ykdojo/claude-code-tips` 추가 → `dx@ykdojo` v0.14.12. 명령 `/dx:handoff` 등. (새 플러그인 명령은 세션 재시작 후 로드됨.)
+- 환경 주의: WSL은 Electron 실행 불가(웹 `npm run dev`만). WSL↔Windows `npm install` 혼용 시 네이티브 바이너리 깨짐.

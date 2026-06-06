@@ -49,6 +49,19 @@ export function getBasePool(): QuizPool {
   }
 })();
 
+// 변경 후 병합된 전체 퀴즈풀을 기본 데이터 파일(src/data/quizzes.json)에 영구 기록.
+// Electron(로컬/개발)에서만 동작하며, 웹·패키징 빌드에선 no-op → localStorage 영속으로 폴백.
+function syncPoolToFile(): void {
+  const api = window.electronAPI;
+  if (!api?.savePool) return;
+  try {
+    const pool = getEffectivePool();
+    void api.savePool(JSON.stringify(pool, null, 2));
+  } catch {
+    /* 파일 기록 실패는 무시 (localStorage에는 이미 저장됨) */
+  }
+}
+
 export function getEffectivePool(): QuizPool {
   const custom = loadState().customQuizPool;
   if (!custom) return basePool;
@@ -102,6 +115,7 @@ export function upsertQuiz(categoryId: string, quiz: Quiz): void {
   if (idx >= 0) cat.quizzes[idx] = quiz;
   else cat.quizzes.push(quiz);
   saveState({ customQuizPool: { ...custom, categories } });
+  syncPoolToFile();
 }
 
 export function deleteQuiz(categoryId: string, quizId: string): void {
@@ -116,6 +130,7 @@ export function deleteQuiz(categoryId: string, quizId: string): void {
     const hidden = new Set(custom.hiddenQuizIds ?? []);
     hidden.add(quizId);
     saveState({ customQuizPool: { ...custom, hiddenQuizIds: [...hidden] } });
+    syncPoolToFile();
     return;
   }
 
@@ -123,6 +138,7 @@ export function deleteQuiz(categoryId: string, quizId: string): void {
     c.id === categoryId ? { ...c, quizzes: c.quizzes.filter((q) => q.id !== quizId) } : c,
   );
   saveState({ customQuizPool: { ...custom, categories } });
+  syncPoolToFile();
 }
 
 export function toggleQuizEnabled(categoryId: string, quizId: string, enabled: boolean): void {
@@ -141,10 +157,12 @@ export function upsertCategory(category: Category): void {
   if (idx >= 0) categories[idx] = category;
   else categories.push(category);
   saveState({ customQuizPool: { ...custom, categories } });
+  syncPoolToFile();
 }
 
 export function resetToDefault(): void {
   saveState({ customQuizPool: undefined });
+  syncPoolToFile();
 }
 
 export async function fileToDataUrl(file: File): Promise<string> {
@@ -156,6 +174,31 @@ export async function fileToDataUrl(file: File): Promise<string> {
   });
 }
 
+// 업로드 이미지를 최대 변(maxDim) 기준으로 축소해 JPEG dataURL로 변환.
+// localStorage 영속 + quizzes.json 베이킹 시 용량 폭증을 막기 위함.
+export async function imageFileToDataUrl(file: File, maxDim = 1000, quality = 0.82): Promise<string> {
+  const rawUrl = await fileToDataUrl(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error('이미지를 불러올 수 없습니다.'));
+      el.src = rawUrl;
+    });
+    const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+    if (scale >= 1 && file.size < 300_000) return rawUrl; // 이미 작으면 원본 유지
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.width * scale);
+    canvas.height = Math.round(img.height * scale);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return rawUrl;
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/jpeg', quality);
+  } catch {
+    return rawUrl; // 변환 실패 시 원본 dataURL로 폴백
+  }
+}
+
 export function exportPool(): string {
   const custom = loadState().customQuizPool ?? { categories: [] };
   return JSON.stringify({ version: '1.0', ...custom }, null, 2);
@@ -165,6 +208,7 @@ export function importPool(json: string, mode: 'replace' | 'merge'): void {
   const data = JSON.parse(json) as { categories?: Category[]; hiddenQuizIds?: string[] };
   if (mode === 'replace') {
     saveState({ customQuizPool: { categories: data.categories ?? [], hiddenQuizIds: data.hiddenQuizIds } });
+    syncPoolToFile();
     return;
   }
   const current = loadState().customQuizPool ?? { categories: [] };
@@ -187,4 +231,5 @@ export function importPool(json: string, mode: 'replace' | 'merge'): void {
   saveState({
     customQuizPool: { categories: mergedCategories, hiddenQuizIds: [...hidden] },
   });
+  syncPoolToFile();
 }

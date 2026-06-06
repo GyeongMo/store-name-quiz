@@ -35,7 +35,7 @@ export function AwardsScreen() {
         particleCount: 200,
         spread: 120,
         origin: { y: 0.4 },
-        colors: ['#FFB3BA', '#FFDFBA', '#BAFFC9', '#BAE1FF', '#D4BAFF', '#FF6B9D'],
+        colors: ['#4FBEE2', '#45CBA8', '#7FB4F0', '#9F8FE0', '#3FD0C4', '#7AA7EC'],
       });
     }, 400);
 

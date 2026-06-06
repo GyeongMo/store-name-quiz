@@ -8,6 +8,9 @@ declare global {
         content: string;
         type: 'json' | 'csv';
       }) => Promise<{ saved: boolean; filePath?: string }>;
+      savePool?: (
+        json: string,
+      ) => Promise<{ saved: boolean; filePath?: string; reason?: string }>;
       isElectron?: boolean;
     };
   }

@@ -2,28 +2,28 @@
 @import "tailwindcss";
 
 @theme {
-  /* 초성 버블 - 파스텔 레인보우 */
-  --color-bubble-1: #FFB3BA;
-  --color-bubble-2: #FFDFBA;
-  --color-bubble-3: #FFFFBA;
-  --color-bubble-4: #BAFFC9;
-  --color-bubble-5: #BAE1FF;
-  --color-bubble-6: #D4BAFF;
+  /* 초성 버블 - 스카이블루·민트·연보라 연한 파스텔 */
+  --color-bubble-1: #C3E8F8;
+  --color-bubble-2: #CAF3E9;
+  --color-bubble-3: #DCF5EC;
+  --color-bubble-4: #BFEFE5;
+  --color-bubble-5: #D9D2F7;
+  --color-bubble-6: #E5DFFC;
 
   /* UI 색상 */
-  --color-bg-primary: #FFF8F0;
+  --color-bg-primary: #F2FBFC;
   --color-bg-card: #FFFFFF;
-  --color-text-primary: #4A3728;
-  --color-text-secondary: #8B7355;
-  --color-accent: #FF6B9D;
-  --color-accent-hover: #FF5088;
+  --color-text-primary: #2C5360;
+  --color-text-secondary: #6E97A0;
+  --color-accent: #4FBEE2;
+  --color-accent-hover: #3AAFD6;
 
-  /* 상태 색상 */
-  --color-correct: #4CAF50;
-  --color-wrong: #FF7043;
-  --color-timer-safe: #4CAF50;
-  --color-timer-warning: #FFC107;
-  --color-timer-danger: #FF5252;
+  /* 상태 색상 (점수판 버튼: +10 민트 / -10 연보라) */
+  --color-correct: #45CBA8;
+  --color-wrong: #9F8FE0;
+  --color-timer-safe: #45CBA8;
+  --color-timer-warning: #F3CE82;
+  --color-timer-danger: #F2969B;
 
   /* 그림자 */
   --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -38,9 +38,12 @@
 
   body {
     margin: 0;
-    background-color: #FFF8F0;
-    color: #4A3728;
+    background-color: #F2FBFC;
+    color: #2C5360;
     overflow-x: hidden;
+    /* 세로 스크롤바 공간을 항상 예약 → 콘텐츠 높이 변화로 인한 너비 흔들림 방지
+       (FitText 재측정 무한 루프 예방) */
+    scrollbar-gutter: stable;
     min-height: 100vh;
     font-size: 20px;
   }
@@ -72,8 +75,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.4); }
-  50% { box-shadow: 0 0 20px 10px rgba(255, 107, 157, 0.2); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(79, 190, 226, 0.4); }
+  50% { box-shadow: 0 0 20px 10px rgba(79, 190, 226, 0.2); }
 }
 
 @keyframes bounce-in {
@@ -128,13 +131,13 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #FFF8F0;
+  background: #F2FBFC;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #FFDFBA;
+  background: #CAF3E9;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FFB3BA;
+  background: #C3E8F8;
 }
