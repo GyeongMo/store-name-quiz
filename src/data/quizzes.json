@@ -199,8 +199,8 @@
         },
         {
           "id": "jigu-arcade",
-          "answer": "지구오락실",
-          "initials": "ㅈㄱㅇㄹㅅ",
+          "answer": "지구 오락실",
+          "initials": "ㅈㄱ ㅇㄹㅅ",
           "aliases": [],
           "pictogram": "🎰🧸🌍",
           "catchphrase": "동전 넣고 캡슐 한 번 뽑기!"
@@ -223,8 +223,8 @@
         },
         {
           "id": "gildong-udon",
-          "answer": "길동우동",
-          "initials": "ㄱㄷㅇㄷ",
+          "answer": "길동 우동",
+          "initials": "ㄱㄷ ㅇㄷ",
           "aliases": [],
           "pictogram": "🍜🦐🥢",
           "catchphrase": "쫄깃한 우동 한 그릇!"
@@ -274,10 +274,12 @@
         },
         {
           "id": "duri-ent",
-          "answer": "두리 이비인후과",
-          "initials": "ㄷㄹ ㅇㅂㅇㅎㄱ",
+          "answer": "두리 이비인후과의원",
+          "initials": "ㄷㄹ ㅇㅂㅇㅎㄱㅇㅇ",
           "aliases": [
-            "두리이비인후과"
+            "두리이비인후과의원",
+            "두리이비인후과",
+            "두리 이비인후과"
           ],
           "pictogram": "👃👂🏥",
           "catchphrase": "코감기엔 이비인후과로!"
@@ -410,8 +412,8 @@
         },
         {
           "id": "yeye-beauty-salon",
-          "answer": "예예미장원",
-          "initials": "ㅇㅇㅁㅈㅇ",
+          "answer": "예예 미장원",
+          "initials": "ㅇㅇ ㅁㅈㅇ",
           "aliases": [
             "예예미장원"
           ],
@@ -420,8 +422,8 @@
         },
         {
           "id": "hyangdong-best-laundry",
-          "answer": "향동베스트세탁",
-          "initials": "ㅎㄷㅂㅅㅌㅅㅌ",
+          "answer": "향동 베스트 세탁",
+          "initials": "ㅎㄷ ㅂㅅㅌ ㅅㅌ",
           "aliases": [
             "향동베스트세탁소"
           ],
@@ -430,8 +432,8 @@
         },
         {
           "id": "kidshill-pediatrics",
-          "answer": "키즈힐소아청소년과의원",
-          "initials": "ㅋㅈㅎㅅㅇㅊㅅㄴㄱㅇㅇ",
+          "answer": "키즈힐 소아청소년과의원",
+          "initials": "ㅋㅈㅎ ㅅㅇㅊㅅㄴㄱㅇㅇ",
           "aliases": [
             "키즈힐소아청소년과",
             "키즈힐"
@@ -441,8 +443,8 @@
         },
         {
           "id": "kaijeong-hair",
-          "answer": "카이정헤어",
-          "initials": "ㅋㅇㅈㅎㅇ",
+          "answer": "카이정 헤어",
+          "initials": "ㅋㅇㅈ ㅎㅇ",
           "aliases": [
             "카이정"
           ],
@@ -493,8 +495,8 @@
         },
         {
           "id": "hyangdong-miracle-clinic",
-          "answer": "향동미라클의원",
-          "initials": "ㅎㄷㅁㄹㅋㅇㅇ",
+          "answer": "향동 미라클의원",
+          "initials": "ㅎㄷ ㅁㄹㅋㅇㅇ",
           "aliases": [
             "향동미라클",
             "미라클의원"
@@ -515,8 +517,8 @@
         },
         {
           "id": "purple-junior-kids-cafe",
-          "answer": "퍼플주니어키즈카페",
-          "initials": "ㅍㅍㅈㄴㅇㅋㅈㅋㅍ",
+          "answer": "퍼플주니어 키즈카페",
+          "initials": "ㅍㅍㅈㄴㅇ ㅋㅈㅋㅍ",
           "aliases": [
             "퍼플주니어",
             "퍼플키즈카페"
@@ -526,8 +528,8 @@
         },
         {
           "id": "kkuljaem-kids-room",
-          "answer": "꿀잼키즈룸",
-          "initials": "ㄲㅈㅋㅈㄹ",
+          "answer": "꿀잼 키즈룸",
+          "initials": "ㄲㅈ ㅋㅈㄹ",
           "aliases": [
             "꿀잼키즈룸"
           ],
@@ -564,8 +566,8 @@
         },
         {
           "id": "keukeu-stationery",
-          "answer": "크크문구",
-          "initials": "ㅋㅋㅁㄱ",
+          "answer": "크크 문구",
+          "initials": "ㅋㅋ ㅁㄱ",
           "aliases": [
             "크크"
           ],
