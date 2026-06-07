@@ -18,16 +18,6 @@
           "catchphrase": "사이렌 오더로 주문하세요!"
         },
         {
-          "id": "mcdonalds",
-          "answer": "맥도날드",
-          "initials": "ㅁㄷㄴㄷ",
-          "aliases": [
-            "맥날"
-          ],
-          "pictogram": "🍔🍟🟡",
-          "catchphrase": "해피밀 세트 나왔습니다!"
-        },
-        {
           "id": "oliveyoung",
           "answer": "올리브영",
           "initials": "ㅇㄹㅂㅇ",
@@ -74,16 +64,6 @@
           ],
           "pictogram": "🥖🎂🇫🇷",
           "catchphrase": "갓 구운 빵 나왔어요!"
-        },
-        {
-          "id": "compose-coffee",
-          "answer": "컴포즈커피",
-          "initials": "ㅋㅍㅈㅋㅍ",
-          "aliases": [
-            "컴포즈"
-          ],
-          "pictogram": "☕🧊💸",
-          "catchphrase": "가성비 커피 한 잔!"
         },
         {
           "id": "gohyangok-sundaeguk",
@@ -553,6 +533,44 @@
           ],
           "pictogram": "🧸🎠🧒",
           "catchphrase": "꿀잼 가득 키즈룸으로!"
+        },
+        {
+          "id": "jeongjeom",
+          "answer": "정점",
+          "initials": "ㅈㅈ",
+          "aliases": [],
+          "pictogram": "🥩🔥🍖",
+          "catchphrase": "숯불에 구운 고기 맛보러 오세요!"
+        },
+        {
+          "id": "pizzanara-chickengongju",
+          "answer": "피자나라 치킨공주",
+          "initials": "ㅍㅈㄴㄹ ㅊㅋㄱㅈ",
+          "aliases": [
+            "피나치공"
+          ],
+          "pictogram": "🍕🍗👑",
+          "catchphrase": "피자와 치킨을 한 번에 즐겨요!"
+        },
+        {
+          "id": "lotteria",
+          "answer": "롯데리아",
+          "initials": "ㄹㄷㄹㅇ",
+          "aliases": [
+            "롯리아"
+          ],
+          "pictogram": "🍔🍟🥤",
+          "catchphrase": "리아 불고기버거 나왔습니다!"
+        },
+        {
+          "id": "keukeu-stationery",
+          "answer": "크크문구",
+          "initials": "ㅋㅋㅁㄱ",
+          "aliases": [
+            "크크"
+          ],
+          "pictogram": "✏️📒🖍️",
+          "catchphrase": "크크문구에서 준비물 사 가세요!"
         }
       ]
     }
