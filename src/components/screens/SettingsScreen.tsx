@@ -74,7 +74,7 @@ export function SettingsScreen() {
         {settings.timerEnabled && (
           <SettingRow label="타이머 시간">
             <div className="flex gap-2">
-              {[20, 30, 45, 60].map((s) => (
+              {[20, 30, 45].map((s) => (
                 <button
                   key={s}
                   onClick={() => dispatch({ type: 'UPDATE_SETTINGS', patch: { timerSeconds: s } })}
