@@ -3,11 +3,10 @@ import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { useGame } from '../../context/GameContext';
 import { Button } from '../common/Button';
-import { shuffleArray } from '../../utils/shuffle';
 import type { Team } from '../../types/game';
 import { soundManager } from '../../utils/soundManager';
 import { appendResult, type GameResult } from '../../utils/storage';
-import { getEffectivePool } from '../../utils/quizPool';
+import { pickTieBreakerQuiz } from '../../utils/quizPool';
 import { useDialogs } from '../common/DialogProvider';
 
 interface RankedTeam extends Team {
@@ -55,19 +54,16 @@ export function AwardsScreen() {
   }, []);
 
   const startTieBreaker = async () => {
-    const allQuizzes = getEffectivePool()
-      .categories.flatMap((c) => c.quizzes)
-      .filter((q) => q.isEnabled !== false);
     // 본게임에 나오지 않은 문제에서 랜덤 선택
-    const unused = allQuizzes.filter(
-      (q) => !state.quizzes.some((used) => used.id === q.id),
-    );
-    if (unused.length === 0) {
+    const { quiz, fellBack } = pickTieBreakerQuiz(state.quizzes.map((q) => q.id));
+    if (!quiz) {
+      await dialogs.alert('출제 가능한 퀴즈가 없습니다.');
+      return;
+    }
+    if (fellBack) {
       await dialogs.alert('출제 가능한 미사용 퀴즈가 없습니다. 이미 사용된 문제 중 무작위 선택합니다.');
     }
-    const pickPool = unused.length > 0 ? unused : allQuizzes;
-    const picked = shuffleArray(pickPool)[0];
-    dispatch({ type: 'START_TIEBREAKER', tiedTeamIds: topTied, quiz: picked });
+    dispatch({ type: 'START_TIEBREAKER', tiedTeamIds: topTied, quiz });
   };
 
   const timestamp = () =>

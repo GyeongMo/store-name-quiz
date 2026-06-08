@@ -5,9 +5,12 @@ import { Button } from '../common/Button';
 import { soundManager } from '../../utils/soundManager';
 import { speak, cancelSpeak } from '../../utils/tts';
 import { TIEBREAKER_SECONDS } from '../../hooks/useGameReducer';
+import { pickTieBreakerQuiz } from '../../utils/quizPool';
+import { useDialogs } from '../common/DialogProvider';
 
 export function QuizBoard() {
   const { state, dispatch } = useGame();
+  const dialogs = useDialogs();
   const { quizzes, currentIndex, phase, timeRemaining, hint1Shown, hint2Shown, settings, tieBreaker } = state;
   const currentQuiz = quizzes[currentIndex];
   const hint1AnnouncedRef = useRef(false);
@@ -80,11 +83,26 @@ export function QuizBoard() {
     }
   };
 
+  const handleRetry = async () => {
+    if (!tieBreaker.active) return;
+    const { quiz, fellBack } = pickTieBreakerQuiz(tieBreaker.usedQuizIds ?? []);
+    if (!quiz) {
+      await dialogs.alert('출제 가능한 퀴즈가 없습니다.');
+      return;
+    }
+    if (fellBack) {
+      await dialogs.alert('출제 가능한 미사용 퀴즈가 없습니다. 이미 사용된 문제 중 무작위 선택합니다.');
+    }
+    cancelSpeak();
+    dispatch({ type: 'RETRY_TIEBREAKER', quiz });
+  };
+
   return (
     <div className="bg-white rounded-3xl p-6 shadow-[var(--shadow-lg)] h-full flex flex-col">
       {tieBreaker.active && (
         <div className="mb-3 text-center bg-accent text-white rounded-xl py-2 font-bold">
           ⚔️ 결승전 진행 중
+          {(tieBreaker.round ?? 1) > 1 && ` · ${tieBreaker.round}라운드`}
         </div>
       )}
 
@@ -253,7 +271,7 @@ export function QuizBoard() {
             </Button>
           )}
           {tieBreaker.active && (
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap items-center">
               {state.teams
                 .filter((t) => tieBreaker.tiedTeamIds.includes(t.id))
                 .map((t) => (
@@ -268,6 +286,9 @@ export function QuizBoard() {
                     {t.emoji} {t.name} 우승
                   </Button>
                 ))}
+              <Button variant="secondary" size="md" onClick={handleRetry}>
+                🔄 재대결 (다음 문제)
+              </Button>
             </div>
           )}
           {isRevealed && !tieBreaker.active && (

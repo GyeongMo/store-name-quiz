@@ -18,7 +18,13 @@ export function MainScreen() {
           </aside>
         )}
         <main className="flex-1 min-w-0">
-          <QuizBoard key={`${state.currentIndex}-${isTieBreaker ? 'tb' : 'normal'}`} />
+          <QuizBoard
+            key={
+              isTieBreaker
+                ? `tb-${state.tieBreaker.round ?? 1}`
+                : `${state.currentIndex}-normal`
+            }
+          />
         </main>
       </div>
     </div>

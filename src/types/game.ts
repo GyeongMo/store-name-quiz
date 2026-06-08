@@ -23,6 +23,8 @@ export interface TieBreakerState {
   active: boolean;
   tiedTeamIds: string[];
   winnerTeamId?: string;
+  round?: number;          // 결승전 라운드 (재대결 시 증가, QuizBoard 리마운트 키)
+  usedQuizIds?: string[];  // 본게임 + 지난 결승전 라운드에서 출제된 퀴즈 id (중복 출제 방지)
 }
 
 export interface GameState {
@@ -50,6 +52,7 @@ export type GameAction =
   | { type: 'UPDATE_TEAM'; teamId: string; patch: Partial<Team> }
   | { type: 'GO_AWARDS' }
   | { type: 'START_TIEBREAKER'; tiedTeamIds: string[]; quiz: Quiz }
+  | { type: 'RETRY_TIEBREAKER'; quiz: Quiz }
   | { type: 'RESOLVE_TIEBREAKER'; winnerTeamId: string }
   | { type: 'RESTART' }
   | { type: 'OPEN_EDITOR' }

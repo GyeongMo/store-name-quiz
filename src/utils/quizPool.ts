@@ -1,6 +1,7 @@
 import quizData from '../data/quizzes.json';
 import type { Category, Quiz, QuizPool } from '../types/quiz';
 import { loadState, saveState } from './storage';
+import { shuffleArray } from './shuffle';
 
 const basePool = quizData as QuizPool;
 
@@ -92,6 +93,19 @@ export function getEffectivePool(): QuizPool {
   });
 
   return { version: basePool.version, categories: merged };
+}
+
+// 결승전 출제용 퀴즈 무작위 선택. usedIds(본게임 + 지난 라운드)에 없는 문제 우선,
+// 모두 소진됐으면 전체에서 선택하고 fellBack=true 반환.
+export function pickTieBreakerQuiz(usedIds: string[]): { quiz: Quiz | null; fellBack: boolean } {
+  const all = getEffectivePool()
+    .categories.flatMap((c) => c.quizzes)
+    .filter((q) => q.isEnabled !== false);
+  if (all.length === 0) return { quiz: null, fellBack: false };
+  const used = new Set(usedIds);
+  const unused = all.filter((q) => !used.has(q.id));
+  const pool = unused.length > 0 ? unused : all;
+  return { quiz: shuffleArray(pool)[0], fellBack: unused.length === 0 };
 }
 
 export function upsertQuiz(categoryId: string, quiz: Quiz): void {

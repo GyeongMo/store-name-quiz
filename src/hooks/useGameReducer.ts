@@ -145,7 +145,31 @@ function reducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         screen: 'playing',
-        tieBreaker: { active: true, tiedTeamIds: action.tiedTeamIds },
+        tieBreaker: {
+          active: true,
+          tiedTeamIds: action.tiedTeamIds,
+          round: 1,
+          usedQuizIds: [...state.quizzes.map((q) => q.id), action.quiz.id],
+        },
+        quizzes: [action.quiz],
+        currentIndex: 0,
+        phase: 'running',
+        timeRemaining: TIEBREAKER_SECONDS,
+        hint1Shown: false,
+        hint2Shown: false,
+      };
+    }
+
+    case 'RETRY_TIEBREAKER': {
+      // 승부가 안 났을 때 새 문제로 재대결 — 같은 동점 팀 유지, 라운드 증가
+      if (!state.tieBreaker.active) return state;
+      return {
+        ...state,
+        tieBreaker: {
+          ...state.tieBreaker,
+          round: (state.tieBreaker.round ?? 1) + 1,
+          usedQuizIds: [...(state.tieBreaker.usedQuizIds ?? []), action.quiz.id],
+        },
         quizzes: [action.quiz],
         currentIndex: 0,
         phase: 'running',
