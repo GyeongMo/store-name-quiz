@@ -25,7 +25,7 @@
             "올영"
           ],
           "pictogram": "💄🧴🫒",
-          "catchphrase": "올영 세일 시작!"
+          "catchphrase": "오늘부터 화장품 세일 시작!"
         },
         {
           "id": "daiso",
@@ -129,7 +129,7 @@
           "initials": "ㅋㅁㅌ",
           "aliases": [],
           "pictogram": "🛒🧊🏪",
-          "catchphrase": "시원하게 쿨마트에서 장보기!"
+          "catchphrase": "시원하게 장보러 가요!"
         },
         {
           "id": "chamjoeun-gogitgan",
@@ -149,7 +149,7 @@
             "할리스커피"
           ],
           "pictogram": "☕🔴📚",
-          "catchphrase": "할리스에서 달콤한 에이드 한 잔 어때요?"
+          "catchphrase": "달콤한 에이드 한 잔 어때요?"
         },
         {
           "id": "dasaeknyang",
@@ -167,7 +167,7 @@
             "투썸"
           ],
           "pictogram": "☕🍰🧁",
-          "catchphrase": "케이크는 역시 투썸이죠!"
+          "catchphrase": "케이크는 역시 여기죠!"
         },
         {
           "id": "angyeong-jinjeongseong",
@@ -185,7 +185,7 @@
           "initials": "ㅇㄷㄹㅁㄷ",
           "aliases": [],
           "pictogram": "🎰🧸✨",
-          "catchphrase": "캡슐 뽑으러 안드로메다로!"
+          "catchphrase": "캡슐 뽑으러 가 볼까요?"
         },
         {
           "id": "angel-hunters",
@@ -248,7 +248,7 @@
             "여우애김밥"
           ],
           "pictogram": "🦊🍙🥢",
-          "catchphrase": "여우애 김밥 한 줄이요!"
+          "catchphrase": "고소한 김밥 한 줄이요!"
         },
         {
           "id": "nobrand-burger",
@@ -270,7 +270,7 @@
             "메가"
           ],
           "pictogram": "☕🟡🥤",
-          "catchphrase": "메가사이즈 음료 한 잔!"
+          "catchphrase": "엄청 큰 사이즈 음료 한 잔!"
         },
         {
           "id": "duri-ent",
@@ -379,7 +379,7 @@
             "탕화쿵푸"
           ],
           "pictogram": "🌶️🥢🐼",
-          "catchphrase": "탕화쿵푸 마라탕 매운맛이요!"
+          "catchphrase": "얼얼한 마라탕 매운맛이요!"
         },
         {
           "id": "gabin",
@@ -398,7 +398,7 @@
             "신전"
           ],
           "pictogram": "🌶️🍢🟥",
-          "catchphrase": "신전 떡볶이 매운맛 도전!"
+          "catchphrase": "매콤한 떡볶이 매운맛 도전!"
         },
         {
           "id": "burger-king",
@@ -439,7 +439,7 @@
             "키즈힐"
           ],
           "pictogram": "🧒🩺🏥",
-          "catchphrase": "아이가 아프면 키즈힐로!"
+          "catchphrase": "아이가 아프면 여기로!"
         },
         {
           "id": "kaijeong-hair",
@@ -449,7 +449,7 @@
             "카이정"
           ],
           "pictogram": "💇‍♂️✂️💈",
-          "catchphrase": "트렌디한 헤어, 카이정에서!"
+          "catchphrase": "트렌디한 헤어스타일로 변신!"
         },
         {
           "id": "nice-guy",
@@ -502,7 +502,7 @@
             "미라클의원"
           ],
           "pictogram": "🏥🩺💉",
-          "catchphrase": "건강은 향동미라클에서 챙기세요!"
+          "catchphrase": "건강은 여기서 챙기세요!"
         },
         {
           "id": "ttangs-budae",
@@ -572,7 +572,7 @@
             "크크"
           ],
           "pictogram": "✏️📒🖍️",
-          "catchphrase": "크크문구에서 준비물 사 가세요!"
+          "catchphrase": "준비물은 여기서 사 가세요!"
         }
       ]
     }
