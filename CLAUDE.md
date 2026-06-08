@@ -63,9 +63,12 @@ settings ──▶ playing ──▶ awards ──▶ (결승전 시 다시 play
 
 타임라인 (30초 예시):
 - `t=0`: `phase='running'`, hint1Shown/hint2Shown=false
-- `t=15` (1/2): `hint1Shown=true` → 픽토그램 표시
-- `t=25` (-5초): `hint2Shown=true`, `phase='countdown'` → 명대사 TTS + 우상단 카운트다운
+- `t=10` (1/3 경과, 남은 2/3 이하 `next <= floor(total*2/3)`): `hint1Shown=true` → 픽토그램 표시
+- `t=20` (2/3 경과, 남은 1/3 이하 `next <= floor(total/3)`): `hint2Shown=true` → 명대사 TTS + 텍스트
+- `t=25` (-5초): `phase='countdown'` → 우상단 카운트다운 (명대사 노출과 분리된 별개 단계)
 - `t=30`: `phase='revealed'`
+
+**명대사 노출과 카운트다운은 분리됨**: 명대사(hint2)는 2/3 경과 시, 카운트다운 phase는 마지막 5초에 독립적으로 시작. countdown 진입 시 `QuizBoard`가 진행 중이던 명대사 TTS를 `cancelSpeak()`로 중단.
 
 **결승전에서는 TICK이 힌트 자동 노출을 건너뜀** (초성만으로 승부). Scoreboard도 `MainScreen`에서 `tieBreaker.active` 체크로 숨김.
 
