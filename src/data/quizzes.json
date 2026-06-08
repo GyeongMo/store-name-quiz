@@ -63,7 +63,7 @@
             "파바"
           ],
           "pictogram": "🥖🎂🥐",
-          "catchphrase": "갓 구운 빵 나왔어요!"
+          "catchphrase": "파리의 감성을 담은 디저트 카페"
         },
         {
           "id": "gohyangok-sundaeguk",
@@ -83,7 +83,7 @@
             "등촌샤브"
           ],
           "pictogram": "🍲🥬🍜",
-          "catchphrase": "샤브 먹고 칼국수까지 든든하게!"
+          "catchphrase": "샤브 먹고 칼국수에 죽까지 든든하게"
         },
         {
           "id": "gongcha",
@@ -99,7 +99,7 @@
           "initials": "ㄷㅇㅈ",
           "aliases": [],
           "pictogram": "🍶🍱🏮",
-          "catchphrase": "오늘도 정성 가득 한 상!"
+          "catchphrase": "온기를 전하는 한 그릇, 한우곰탕이 최고"
         },
         {
           "id": "hyangdong-kimchi-samgyeop",
@@ -109,7 +109,7 @@
             "향동김치삼겹"
           ],
           "pictogram": "🥬🥓🔥",
-          "catchphrase": "묵은지에 삼겹살 한 점!",
+          "catchphrase": "구운 김치와 삼겹살은 환상의 짝꿍",
           "isCustom": true,
           "isEnabled": true,
           "createdAt": "2026-06-02T08:16:13.732Z",
@@ -121,7 +121,7 @@
           "initials": "ㅍㄹㄷ ㅇㅇㅅ",
           "aliases": [],
           "pictogram": "🥐🍞🌙",
-          "catchphrase": "갓 구운 빵 향기 가득해요!"
+          "catchphrase": "양배추 우린물로 반죽해 소화 잘 되는 맛있는 빵집"
         },
         {
           "id": "coolmart",
@@ -129,7 +129,7 @@
           "initials": "ㅋㅁㅌ",
           "aliases": [],
           "pictogram": "🛒🧊🏪",
-          "catchphrase": "시원하게 장보러 가요!"
+          "catchphrase": "향동에서 제일 큰 마트로 시원하게 장보러 가요"
         },
         {
           "id": "chamjoeun-gogitgan",
@@ -167,7 +167,7 @@
             "투썸"
           ],
           "pictogram": "☕🍰🧁",
-          "catchphrase": "케이크는 역시 여기죠!"
+          "catchphrase": "스초생, 케이크는 역시 여기죠"
         },
         {
           "id": "angyeong-jinjeongseong",
@@ -282,7 +282,7 @@
             "두리 이비인후과"
           ],
           "pictogram": "👃👂🏥",
-          "catchphrase": "코감기엔 이비인후과로!"
+          "catchphrase": "코, 목, 귀가 아플땐 어디로?"
         },
         {
           "id": "hyangdong-onnuri-pharmacy",
@@ -491,7 +491,7 @@
           "initials": "ㅍㄱㄷ",
           "aliases": [],
           "pictogram": "🍗🔥🪵",
-          "catchphrase": "숯불에 구운 닭 한 점!"
+          "catchphrase": "숯불에 구운 닭갈비 한 점"
         },
         {
           "id": "hyangdong-miracle-clinic",
@@ -524,7 +524,7 @@
             "퍼플키즈카페"
           ],
           "pictogram": "🎈🛝🧒",
-          "catchphrase": "신나게 뛰어노는 키즈카페!"
+          "catchphrase": "초등학생도 신나게 뛰어노는 키즈카페"
         },
         {
           "id": "kkuljaem-kids-room",
@@ -542,7 +542,7 @@
           "initials": "ㅈㅈ",
           "aliases": [],
           "pictogram": "🥩🔥🍖",
-          "catchphrase": "숯불에 구운 고기 맛보러 오세요!"
+          "catchphrase": "직접 구워주는 돼지고기 숯불구이"
         },
         {
           "id": "pizzanara-chickengongju",
@@ -572,7 +572,7 @@
             "크크"
           ],
           "pictogram": "✏️📒🖍️",
-          "catchphrase": "준비물은 여기서 사 가세요!"
+          "catchphrase": "향동에 있는 유일한 문구점"
         }
       ]
     }
