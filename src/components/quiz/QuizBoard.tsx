@@ -100,7 +100,7 @@ export function QuizBoard() {
   return (
     <div className="bg-white rounded-3xl p-6 shadow-[var(--shadow-lg)] h-full flex flex-col">
       {tieBreaker.active && (
-        <div className="mb-3 text-center bg-accent text-white rounded-xl py-2 font-bold">
+        <div className="mb-3 text-center bg-accent text-white rounded-xl py-2 font-bold text-[2rem]">
           ⚔️ 결승전 진행 중
           {(tieBreaker.round ?? 1) > 1 && ` · ${tieBreaker.round}라운드`}
         </div>
@@ -265,7 +265,7 @@ export function QuizBoard() {
           />
         )}
         <div className="flex gap-2 ml-auto">
-          {!isRevealed && settings.timerEnabled && (
+          {!isRevealed && settings.timerEnabled && !tieBreaker.active && (
             <Button onClick={handleSkip} variant="secondary" size="md">
               정답 공개
             </Button>
@@ -286,6 +286,11 @@ export function QuizBoard() {
                     {t.emoji} {t.name} 우승
                   </Button>
                 ))}
+              {!isRevealed && settings.timerEnabled && (
+                <Button onClick={handleSkip} variant="secondary" size="md">
+                  정답 공개
+                </Button>
+              )}
               <Button variant="secondary" size="md" onClick={handleRetry}>
                 🔄 재대결 (다음 문제)
               </Button>
